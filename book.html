@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking & Payment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">RideBooking</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="booking.html" class="active">Book</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+            <div style="clear:both;"></div>
+        </div>
+    </header>
+
+    <section class="form-section">
+        <div class="container">
+            <h2 style="text-align:center;">Confirm Your Ride</h2>
+            <p style="text-align:center; margin-bottom:20px;">Total Fare: <strong>$50.00</strong></p>
+
+            <div id="paypal-button-container" style="max-width:400px; margin:auto;"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 RideBooking. All rights reserved.</p>
+    </footer>
+
+    <!-- PayPal JS SDK (Replace with your own client ID) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+
+    <script>
+        paypal.Buttons({
+            style: {
+                shape: 'rect',
+                color: 'gold',
+                layout: 'vertical',
+                label: 'paypal'
+            },
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: { value: '50.00' } // Fare
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Payment completed by ' + details.payer.name.given_name);
+                    window.location.href = 'confirmation.html';
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>
+</body>
+</html>
